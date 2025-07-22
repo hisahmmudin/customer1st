@@ -1,0 +1,803 @@
+<!DOCTYPE html>
+<html lang="ms">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Dashboard Kempen Customer 1st</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #1a1a2e 0%, #16213e 50%, #0f3460 100%);
+            min-height: 100vh;
+            color: #fff;
+            overflow-x: hidden;
+        }
+        
+        .dashboard {
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+        
+        .header {
+            text-align: center;
+            padding: 40px 0;
+            background: linear-gradient(135deg, #ff6b6b, #feca57, #48dbfb);
+            margin-bottom: 30px;
+            border-radius: 20px;
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .header::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: linear-gradient(45deg, rgba(0,0,0,0.1) 25%, transparent 25%), 
+                        linear-gradient(-45deg, rgba(0,0,0,0.1) 25%, transparent 25%);
+            background-size: 20px 20px;
+        }
+        
+        .header-content {
+            position: relative;
+            z-index: 1;
+        }
+        
+        .header h1 {
+            font-size: 3rem;
+            font-weight: 900;
+            text-shadow: 3px 3px 6px rgba(0,0,0,0.3);
+            margin-bottom: 15px;
+            letter-spacing: 2px;
+        }
+        
+        .subtitle {
+            font-size: 1.2rem;
+            font-weight: 300;
+            margin-bottom: 20px;
+            opacity: 0.9;
+        }
+        
+        .campaign-message {
+            background: rgba(255,255,255,0.25);
+            backdrop-filter: blur(10px);
+            padding: 20px 30px;
+            border-radius: 50px;
+            font-size: 1.3rem;
+            font-weight: bold;
+            margin: 20px auto;
+            max-width: 800px;
+            border: 2px solid rgba(255,255,255,0.3);
+            box-shadow: 0 8px 32px rgba(0,0,0,0.2);
+        }
+        
+        .stats-container {
+            margin-bottom: 40px;
+        }
+        
+        .stats-title {
+            font-size: 2.5rem;
+            font-weight: 900;
+            text-align: center;
+            margin-bottom: 10px;
+            background: linear-gradient(135deg, #ff6b6b, #feca57);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+        
+        .stats-subtitle {
+            text-align: center;
+            font-size: 1.1rem;
+            margin-bottom: 30px;
+            opacity: 0.8;
+        }
+        
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 25px;
+            margin-bottom: 40px;
+        }
+        
+        .stat-card {
+            background: linear-gradient(135deg, rgba(255,255,255,0.1), rgba(255,255,255,0.05));
+            backdrop-filter: blur(20px);
+            border: 1px solid rgba(255,255,255,0.2);
+            padding: 30px;
+            border-radius: 20px;
+            text-align: center;
+            transition: all 0.3s ease;
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .stat-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(255,255,255,0.1), transparent);
+            transition: left 0.5s ease;
+        }
+        
+        .stat-card:hover::before {
+            left: 100%;
+        }
+        
+        .stat-card:hover {
+            transform: translateY(-10px);
+            box-shadow: 0 20px 40px rgba(0,0,0,0.3);
+            border-color: rgba(255,255,255,0.4);
+        }
+        
+        .stat-number {
+            font-size: 3.5rem;
+            font-weight: 900;
+            margin-bottom: 15px;
+            background: linear-gradient(135deg, #ff6b6b, #feca57);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+        
+        .stat-label {
+            font-size: 1.2rem;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            font-weight: 600;
+            opacity: 0.9;
+        }
+        
+        .main-content {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 30px;
+            margin-bottom: 40px;
+        }
+        
+        .section {
+            background: linear-gradient(135deg, rgba(255,255,255,0.1), rgba(255,255,255,0.05));
+            backdrop-filter: blur(20px);
+            border: 1px solid rgba(255,255,255,0.2);
+            border-radius: 20px;
+            overflow: hidden;
+            transition: all 0.3s ease;
+        }
+        
+        .section:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 15px 35px rgba(0,0,0,0.2);
+        }
+        
+        .section-header {
+            background: linear-gradient(135deg, #667eea, #764ba2);
+            padding: 25px 30px;
+            font-size: 1.4rem;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .section-header::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: linear-gradient(45deg, transparent 30%, rgba(255,255,255,0.1) 50%, transparent 70%);
+            transform: translateX(-100%);
+            transition: transform 0.5s ease;
+        }
+        
+        .section:hover .section-header::before {
+            transform: translateX(100%);
+        }
+        
+        .section-content {
+            padding: 30px;
+        }
+        
+        .influencer-table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 20px;
+            background: rgba(255,255,255,0.05);
+            border-radius: 15px;
+            overflow: hidden;
+        }
+        
+        .influencer-table th,
+        .influencer-table td {
+            padding: 15px 12px;
+            text-align: left;
+            border-bottom: 1px solid rgba(255,255,255,0.1);
+            font-size: 0.95rem;
+        }
+        
+        .influencer-table th {
+            background: linear-gradient(135deg, rgba(255,255,255,0.15), rgba(255,255,255,0.1));
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            font-size: 0.85rem;
+        }
+        
+        .influencer-table tbody tr {
+            transition: all 0.3s ease;
+        }
+        
+        .influencer-table tbody tr:hover {
+            background: rgba(255,255,255,0.1);
+            transform: scale(1.02);
+        }
+        
+        .platform-badge {
+            padding: 6px 15px;
+            border-radius: 25px;
+            font-size: 0.8rem;
+            font-weight: bold;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+        
+        .instagram { 
+            background: linear-gradient(135deg, #E4405F, #C13584); 
+            color: white; 
+        }
+        .tiktok { 
+            background: linear-gradient(135deg, #000, #333); 
+            color: white; 
+        }
+        .facebook { 
+            background: linear-gradient(135deg, #1877F2, #42A5F5); 
+            color: white; 
+        }
+        .youtube { 
+            background: linear-gradient(135deg, #FF0000, #CC0000); 
+            color: white; 
+        }
+        
+        .sop-list {
+            list-style: none;
+            padding: 0;
+        }
+        
+        .sop-item {
+            background: linear-gradient(135deg, rgba(255,255,255,0.1), rgba(255,255,255,0.05));
+            margin: 15px 0;
+            padding: 20px;
+            border-radius: 15px;
+            border-left: 4px solid;
+            border-image: linear-gradient(135deg, #ff6b6b, #feca57) 1;
+            transition: all 0.3s ease;
+        }
+        
+        .sop-item:hover {
+            transform: translateX(10px);
+            box-shadow: 0 10px 25px rgba(0,0,0,0.15);
+        }
+        
+        .sop-title {
+            font-weight: 700;
+            font-size: 1.1rem;
+            margin-bottom: 10px;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+        
+        .sop-detail {
+            font-size: 0.95rem;
+            opacity: 0.8;
+            line-height: 1.5;
+        }
+        
+        .progress-bar {
+            background: rgba(255,255,255,0.1);
+            border-radius: 15px;
+            height: 8px;
+            overflow: hidden;
+            margin: 15px 0 0 0;
+            position: relative;
+        }
+        
+        .progress-fill {
+            background: linear-gradient(135deg, #ff6b6b, #feca57);
+            height: 100%;
+            border-radius: 15px;
+            transition: all 0.3s ease;
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .progress-fill::after {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: linear-gradient(90deg, transparent, rgba(255,255,255,0.3), transparent);
+            animation: shimmer 2s infinite;
+        }
+        
+        @keyframes shimmer {
+            0% { transform: translateX(-100%); }
+            100% { transform: translateX(100%); }
+        }
+        
+        .add-btn {
+            background: linear-gradient(135deg, #ff6b6b, #feca57);
+            color: white;
+            border: none;
+            padding: 15px 30px;
+            border-radius: 30px;
+            cursor: pointer;
+            font-weight: 700;
+            font-size: 1rem;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            transition: all 0.3s ease;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.2);
+        }
+        
+        .add-btn:hover {
+            transform: translateY(-3px) scale(1.05);
+            box-shadow: 0 10px 25px rgba(0,0,0,0.3);
+        }
+        
+        .full-width {
+            grid-column: 1 / -1;
+        }
+        
+        .content-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 30px;
+            margin-bottom: 25px;
+        }
+        
+        .content-section {
+            background: linear-gradient(135deg, rgba(255,255,255,0.08), rgba(255,255,255,0.04));
+            padding: 25px;
+            border-radius: 15px;
+            border-left: 4px solid;
+            transition: all 0.3s ease;
+        }
+        
+        .video-content {
+            border-left-color: #ff6b6b;
+        }
+        
+        .copywriting-content {
+            border-left-color: #667eea;
+        }
+        
+        .content-section:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 25px rgba(0,0,0,0.15);
+        }
+        
+        .content-title {
+            font-size: 1.3rem;
+            font-weight: 700;
+            margin-bottom: 20px;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+        
+        .video-content .content-title {
+            color: #ff6b6b;
+        }
+        
+        .copywriting-content .content-title {
+            color: #667eea;
+        }
+        
+        .content-list {
+            list-style: none;
+            padding: 0;
+        }
+        
+        .content-list li {
+            padding: 10px 0;
+            border-bottom: 1px solid rgba(255,255,255,0.1);
+            transition: all 0.3s ease;
+        }
+        
+        .content-list li:hover {
+            padding-left: 10px;
+            background: rgba(255,255,255,0.05);
+        }
+        
+        .content-list li:last-child {
+            border-bottom: none;
+        }
+        
+        .content-list strong {
+            font-weight: 700;
+            font-size: 1rem;
+        }
+        
+        .content-list small {
+            opacity: 0.7;
+            font-size: 0.85rem;
+            display: block;
+            margin-top: 3px;
+        }
+        
+        .template-section {
+            background: linear-gradient(135deg, #ffecd2, #fcb69f);
+            padding: 25px;
+            border-radius: 15px;
+            text-align: center;
+            color: #333;
+            margin-top: 25px;
+        }
+        
+        .template-title {
+            font-size: 1.3rem;
+            font-weight: 700;
+            margin-bottom: 15px;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+        
+        .template-text {
+            font-style: italic;
+            font-size: 1rem;
+            line-height: 1.6;
+        }
+        
+        .platform-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 20px;
+        }
+        
+        .platform-item {
+            text-align: center;
+            padding: 25px;
+            background: linear-gradient(135deg, rgba(255,255,255,0.1), rgba(255,255,255,0.05));
+            border-radius: 15px;
+            transition: all 0.3s ease;
+            border: 1px solid rgba(255,255,255,0.1);
+        }
+        
+        .platform-item:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 25px rgba(0,0,0,0.15);
+            border-color: rgba(255,255,255,0.3);
+        }
+        
+        .platform-item h3 {
+            font-size: 1.2rem;
+            margin-bottom: 10px;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+        
+        .platform-item p {
+            opacity: 0.8;
+            margin-bottom: 15px;
+        }
+        
+        .platform-number {
+            font-size: 2rem;
+            font-weight: 900;
+            background: linear-gradient(135deg, #ff6b6b, #feca57);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+        
+        @media (max-width: 768px) {
+            .main-content, .content-grid {
+                grid-template-columns: 1fr;
+            }
+            
+            .header h1 {
+                font-size: 2rem;
+            }
+            
+            .campaign-message {
+                font-size: 1rem;
+                padding: 15px 20px;
+            }
+            
+            .stats-title {
+                font-size: 2rem;
+            }
+            
+            .stat-number {
+                font-size: 2.5rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="dashboard">
+        <div class="header">
+            <div class="header-content">
+                <h1>🍽️ KEMPEN CUSTOMER 1ST</h1>
+                <div class="subtitle">Transformasi Digital Marketing Melalui Influencer Excellence</div>
+                <div class="campaign-message">
+                    "Makanan tidak memuaskan? Maklumkan kepada staff kami untuk gantian PERCUMA!"
+                </div>
+            </div>
+        </div>
+        
+        <div class="stats-container">
+            <div class="stats-title">500K REACH/HARI</div>
+            <div class="stats-subtitle">Target Daily Reach dengan 5 Influencer Aktif - Digital Marketing Revolution</div>
+            
+            <div class="stats-grid">
+                <div class="stat-card">
+                    <div class="stat-number">30</div>
+                    <div class="stat-label">Target Influencer</div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-number" id="currentInfluencers">5</div>
+                    <div class="stat-label">Influencer Aktif/Hari</div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-number">3</div>
+                    <div class="stat-label">Jam Live/Hari</div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-number" id="totalReach">500K</div>
+                    <div class="stat-label">Total Reach/Hari</div>
+                </div>
+            </div>
+        </div>
+        
+        <div class="main-content">
+            <div class="section">
+                <div class="section-header">
+                    📊 Database Influencer Network
+                </div>
+                <div class="section-content">
+                    <button class="add-btn" onclick="addInfluencer()">+ Tambah Influencer</button>
+                    <table class="influencer-table">
+                        <thead>
+                            <tr>
+                                <th>No</th>
+                                <th>Nama Influencer</th>
+                                <th>Platform</th>
+                                <th>Followers</th>
+                                <th>Price/Day</th>
+                                <th>Content Niche</th>
+                            </tr>
+                        </thead>
+                        <tbody id="influencerTableBody">
+                            <tr>
+                                <td>1</td>
+                                <td>@foodiemalay</td>
+                                <td><span class="platform-badge instagram">Instagram</span></td>
+                                <td>45.2K</td>
+                                <td>RM 250</td>
+                                <td>Food Review</td>
+                            </tr>
+                            <tr>
+                                <td>2</td>
+                                <td>@tiktoker_kl</td>
+                                <td><span class="platform-badge tiktok">TikTok</span></td>
+                                <td>78.5K</td>
+                                <td>RM 180</td>
+                                <td>Lifestyle</td>
+                            </tr>
+                            <tr>
+                                <td>3</td>
+                                <td>@localfoodhunter</td>
+                                <td><span class="platform-badge facebook">Facebook</span></td>
+                                <td>32.1K</td>
+                                <td>RM 120</td>
+                                <td>Food Hunter</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+            
+            <div class="section">
+                <div class="section-header">
+                    📋 Standard Operating Procedures
+                </div>
+                <div class="section-content">
+                    <ul class="sop-list">
+                        <li class="sop-item">
+                            <div class="sop-title">🎥 Live Host Session</div>
+                            <div class="sop-detail">Minimum 3 jam sehari dengan interaksi aktif, engagement tinggi, dan brand awareness building</div>
+                            <div class="progress-bar">
+                                <div class="progress-fill" style="width: 75%"></div>
+                            </div>
+                        </li>
+                        <li class="sop-item">
+                            <div class="sop-title">📱 Content Brand atau Menu</div>
+                            <div class="sop-detail">Video dan copywriting untuk target sales dengan konsistency brand messaging</div>
+                            <div class="progress-bar">
+                                <div class="progress-fill" style="width: 60%"></div>
+                            </div>
+                        </li>
+                        <li class="sop-item">
+                            <div class="sop-title">⭐ Customer Review</div>
+                            <div class="sop-detail">Review dengan tagline wajib: "Makanan tidak memuaskan? Maklumkan kepada cashier kami untuk gantian PERCUMA!"</div>
+                            <div class="progress-bar">
+                                <div class="progress-fill" style="width: 85%"></div>
+                            </div>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+            
+            <div class="section full-width">
+                <div class="section-header">
+                    🎯 Content Brand atau Menu: Video dan Copywriting Excellence
+                </div>
+                <div class="section-content">
+                    <div class="content-grid">
+                        <div class="content-section video-content">
+                            <div class="content-title">🎥 Video Content Strategy</div>
+                            <ul class="content-list">
+                                <li>
+                                    <strong>Menu Showcase Videos</strong>
+                                    <small>Close-up shots makanan, presentation yang menarik, food styling professional</small>
+                                </li>
+                                <li>
+                                    <strong>Taste Testing Videos</strong>
+                                    <small>Reaction genuine, describe rasa dan texture, authentic customer experience</small>
+                                </li>
+                                <li>
+                                    <strong>Behind-the-Scenes</strong>
+                                    <small>Proses masakan, kitchen tour, staff interaction, transparency building</small>
+                                </li>
+                                <li>
+                                    <strong>Product Demonstration</strong>
+                                    <small>Cara order, payment process, takeaway, customer journey guidance</small>
+                                </li>
+                                <li>
+                                    <strong>Brand Story Content</strong>
+                                    <small>Sejarah brand, values, customer service focus, emotional connection</small>
+                                </li>
+                            </ul>
+                        </div>
+                        
+                        <div class="content-section copywriting-content">
+                            <div class="content-title">✍️ Copywriting Strategy</div>
+                            <ul class="content-list">
+                                <li>
+                                    <strong>Engaging Captions</strong>
+                                    <small>Hook opening, storytelling, emotional connection, viral potential</small>
+                                </li>
+                                <li>
+                                    <strong>Menu Highlights</strong>
+                                    <small>Describe ingredients, cooking method, pricing, value proposition</small>
+                                </li>
+                                <li>
+                                    <strong>Promotional Text</strong>
+                                    <small>Special offers, discounts, limited time deals, urgency creation</small>
+                                </li>
+                                <li>
+                                    <strong>Call-to-Action</strong>
+                                    <small>"Order sekarang!", "Visit us today!", "Tag kawan!", conversion focused</small>
+                                </li>
+                                <li>
+                                    <strong>Brand Messaging</strong>
+                                    <small>Consistent tone, values, customer-first approach, reputation building</small>
+                                </li>
+                            </ul>
+                        </div>
+                    </div>
+                    
+                    <div class="template-section">
+                        <div class="template-title">📝 Template Copywriting Excellence</div>
+                        <div class="template-text">
+                            "🍽️ Sedap gila [NAMA MENU] ni! Rasa authentic, harga berpatutan. 
+                            Yang best nya, kalau tak puas hati dengan makanan, boleh complain untuk dapat replacement FREE! 
+                            #CustomerFirst #QualityFood #SatisfactionGuaranteed"
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="section full-width">
+                <div class="section-header">
+                    📊 Platform Distribution & Strategy
+                </div>
+                <div class="section-content">
+                    <div class="platform-grid">
+                        <div class="platform-item">
+                            <h3>📸 Instagram</h3>
+                            <p>Food bloggers & Lifestyle influencers untuk visual storytelling</p>
+                            <div class="platform-number">8</div>
+                        </div>
+                        <div class="platform-item">
+                            <h3>🎵 TikTok</h3>
+                            <p>Entertainment & Reviews untuk viral content dan Gen Z reach</p>
+                            <div class="platform-number">12</div>
+                        </div>
+                        <div class="platform-item">
+                            <h3>📘 Facebook</h3>
+                            <p>Community & Local groups untuk neighborhood marketing</p>
+                            <div class="platform-number">6</div>
+                        </div>
+                        <div class="platform-item">
+                            <h3>🎬 YouTube</h3>
+                            <p>Food Vloggers untuk long-form content dan deep engagement</p>
+                            <div class="platform-number">4</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <script>
+        function addInfluencer() {
+            const name = prompt("Nama Influencer:");
+            if (!name) return;
+            
+            const platform = prompt("Platform (Instagram/TikTok/Facebook/YouTube):");
+            if (!platform) return;
+            
+            const followers = prompt("Jumlah Followers:");
+            if (!followers) return;
+            
+            const price = prompt("Price per Day (RM):");
+            if (!price) return;
+            
+            const niche = prompt("Content Niche:");
+            if (!niche) return;
+            
+            const tableBody = document.getElementById('influencerTableBody');
+            const rowCount = tableBody.rows.length + 1;
+            
+            const platformClass = platform.toLowerCase();
+            const newRow = tableBody.insertRow();
+            newRow.innerHTML = `
+                <td>${rowCount}</td>
+                <td>${name}</td>
+                <td><span class="platform-badge ${platformClass}">${platform}</span></td>
+                <td>${followers}</td>
+                <td>RM ${price}</td>
+                <td>${niche}</td>
+            `;
+        }
+        
+        // Initialize with fixed targets
+        window.onload = function() {
+            document.getElementById('currentInfluencers').textContent = '5';
+            document.getElementById('totalReach').textContent = '500K';
+        };
+        
+        // Add some interactive animations
+        document.addEventListener('DOMContentLoaded', function() {
+            const statCards = document.querySelectorAll('.stat-card');
+            const observer = new IntersectionObserver(entries => {
+                entries.forEach(entry => {
+                    if (entry.isIntersecting) {
+                        entry.target.style.animationDelay = Math.random() * 0.5 + 's';
+                        entry.target.classList.add('animate');
+                    }
+                });
+            });
+            
+            statCards.forEach(card => observer.observe(card));
+        });
+    </script>
+</body>
+</html>
